@@ -1,0 +1,35 @@
+#
+# Calorimeter DQM: the DqmCaloDigi module filling the Offline/CaloDQM
+# CaloDigiDQM client. Binning is fixed in the client, so every file this
+# writes has the same histogram set and merges with hadd.
+#
+#   mu2e -c DQM/fcl/caloDQM.fcl -s <mcs or digi file> -T caloDQM.root
+#
+# Defaults suit MDC2025 mcs files (CaloDigis under SelectReco). On data, set
+# digiTag to the label of the calorimeter unpacker. Extra copies per subrun:
+#   physics.analyzers.caloDigiDQM.dqm.hists : @local::DQMHelpers.Hists.PerSubrun
+#
+
+#include "Offline/fcl/minimalMessageService.fcl"
+#include "Offline/fcl/standardServices.fcl"
+#include "Offline/CaloDQM/fcl/prolog.fcl"
+
+process_name : CaloDQM
+
+source : { module_type : RootInput }
+
+services : @local::Services.Reco
+
+physics : {
+  analyzers : {
+    caloDigiDQM : {
+      module_type : DqmCaloDigi
+      digiTag     : "SelectReco"
+      dqm         : @local::CaloDQM.Digi
+    }
+  }
+  caloDQM   : [ caloDigiDQM ]
+  end_paths : [ caloDQM ]
+}
+
+services.TFileService.fileName : "caloDQM.root"
