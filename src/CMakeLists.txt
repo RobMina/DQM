@@ -37,6 +37,15 @@ cet_build_plugin(DqmCal art::module
       ROOT::Postscript
 )
 
+cet_build_plugin(DqmCaloDigi art::module
+    REG_SOURCE DqmCaloDigi_module.cc
+    LIBRARIES REG
+      Offline::CaloDQM
+      Offline::DQMHelpers
+      Offline::RecoDataProducts
+      art_root_io::TFileService_service
+)
+
 cet_build_plugin(DqmCrv art::module
     REG_SOURCE DqmCrv_module.cc
     LIBRARIES REG
