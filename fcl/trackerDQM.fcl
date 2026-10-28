@@ -1,0 +1,35 @@
+#
+# Tracker DQM: the DqmTrackerDigi module filling the Offline/TrackerDQM
+# TrackerDigiDQM client. Binning is fixed in the client, so every file this
+# writes has the same histogram set and merges with hadd.
+#
+#   mu2e -c DQM/fcl/trackerDQM.fcl -s <mcs or digi file> -T trackerDQM.root
+#
+# Defaults suit MDC2025 mcs files (StrawDigis under SelectReco). On data, set
+# digiTag to the label of the tracker unpacker. Extra copies per subrun:
+#   physics.analyzers.trackerDigiDQM.dqm.hists : @local::DQMHelpers.Hists.PerSubrun
+#
+
+#include "Offline/fcl/minimalMessageService.fcl"
+#include "Offline/fcl/standardServices.fcl"
+#include "Offline/TrackerDQM/fcl/prolog.fcl"
+
+process_name : TrackerDQM
+
+source : { module_type : RootInput }
+
+services : @local::Services.Reco
+
+physics : {
+  analyzers : {
+    trackerDigiDQM : {
+      module_type : DqmTrackerDigi
+      digiTag     : "SelectReco"
+      dqm         : @local::TrackerDQM.Digi
+    }
+  }
+  trackerDQM : [ trackerDigiDQM ]
+  end_paths  : [ trackerDQM ]
+}
+
+services.TFileService.fileName : "trackerDQM.root"
