@@ -97,6 +97,15 @@ cet_build_plugin(DqmStr art::module
       ROOT::Postscript
 )
 
+cet_build_plugin(DqmTrackerDigi art::module
+    REG_SOURCE DqmTrackerDigi_module.cc
+    LIBRARIES REG
+      Offline::TrackerDQM
+      Offline::DQMHelpers
+      Offline::RecoDataProducts
+      art_root_io::TFileService_service
+)
+
 cet_build_plugin(DqmTrk art::module
     REG_SOURCE DqmTrk_module.cc
     LIBRARIES REG
